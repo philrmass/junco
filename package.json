@@ -1,5 +1,5 @@
 {
-  "base" "/",
+  "base": "/",
   "name": "junco",
   "private": true,
   "version": "0.0.0",
