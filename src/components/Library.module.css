@@ -1,0 +1,26 @@
+.library {
+  background: white;
+  padding: 16px;
+}
+
+.library button {
+  background: #ddd;
+  height: auto;
+  margin: 2px 8px;
+  padding: 0;
+  padding: 0 8px;
+  aspect-ratio: 1;
+  border-radius: 4px;
+}
+
+.artist {
+  padding: 4px 0;
+}
+
+.album {
+  padding-left: 16px;
+}
+
+.song {
+  padding: 4px 0 4px 32px;
+}
