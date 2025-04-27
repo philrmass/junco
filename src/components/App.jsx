@@ -19,26 +19,27 @@ async function getArtists(host) {
   }
 }
 
-// ??? play automatically if not already playing
-// ??? play next song in queue if playing
-// ??? next button
-// ??? set duration
 // ??? Tabs
+// ??? Fix time display
+// ??? add time line
+// ??? make time line clickable
+// ??? fix queue index with repeated songs
 // ??? toast for song & album add
 // ??? add search as overlay button, bottom right
-// ??? clear queue
+// ??? clear queue, bottom right, ghostbusters icon, hold for options
 // ??? overflow shadows
+// ??? call URL.revokeObjectURL(url) on old songs
 
 export function App() {
-  // ??? local storage host
-  // const host = '192.168.1.2';
-  const host = 'localhost';
+  const host = import.meta.env.DEV ? 'localhost' : '192.168.1.2';
   const [artists, setArtists] = useState([]);
   const [artistGuid, setArtistGuid] = useState(null);
   const [albumGuid, setAlbumGuid] = useState(null);
   const [queue, setQueue] = useState([]);
   const [song, setSong] = useState(null);
+  const [time, setTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [restart, setRestart] = useState(false);
   const [showQueue, setShowQueue] = useState(false);
   const queueIndex = queue.findIndex((s) => s.guid === song?.guid);
   const baseUrl = `http://${host}:${port}/files/`
@@ -53,11 +54,42 @@ export function App() {
         const songs = param0.songs ?? [];
         setQueue((last) => [...last, ...songs]);
         setSong(songs[0]);
+        setIsPlaying(true);
         break;
       }
       case 'addSong': {
         setQueue((last) => [...last, param0]);
         setSong(param0);
+        setIsPlaying(true);
+        break;
+      }
+      case 'next': {
+        const nextSong = queue[queueIndex + 1];
+        if (nextSong) {
+          setSong(nextSong);
+        }
+        break;
+      }
+      case 'onEnd': {
+        const nextSong = queue[queueIndex + 1];
+        setSong(nextSong ?? queue[0] ?? null);
+        if (!nextSong) {
+          setIsPlaying(false);
+        }
+        break;
+      }
+      case 'onTime':
+        setTime(param0);
+        setRestart(false);
+        break;
+      case 'previous': {
+        const previousSong = queue[queueIndex - 1];
+
+        if (!previousSong || time > 1) {
+          setRestart(true);
+        } else {
+          setSong(previousSong);
+        }
         break;
       }
       case 'setPlaying':
@@ -104,7 +136,9 @@ export function App() {
       <Player
         baseUrl={baseUrl}
         isPaused={!isPlaying}
+        restart={restart}
         song={song}
+        time={time}
         onCommand={handleCommand}
       />
     </div>

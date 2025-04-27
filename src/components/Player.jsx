@@ -1,16 +1,20 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import styles from './Player.module.css';
 
-function getSongUrl(baseUrl, song) {
+async function loadSong(baseUrl, song) {
   if (!song?.path) return null;
 
-  return `${baseUrl}${encodeURIComponent(song.path)}`;
+  const response = await fetch(`${baseUrl}${encodeURIComponent(song.path)}`);
+  const blob = await response.blob();
+  return URL.createObjectURL(blob);
 };
 
 export default function Player({
   baseUrl,
   isPaused,
+  restart,
   song,
+  time,
   onCommand,
 }) {
   const [url, setUrl] = useState(null);
@@ -18,25 +22,56 @@ export default function Player({
   const audioPaused = audio.current?.paused;
 
   useEffect(() => {
-    setUrl(getSongUrl(baseUrl, song));
-  }, [song]);
+    (async () => {
+      audio.current.pause();
+      audio.current.src = null;
+      setUrl(await loadSong(baseUrl, song));
+    })();
+  }, [baseUrl, song]);
 
   useEffect(() => {
     if (url && (audioPaused !== isPaused)) {
-      console.log('UPDATE-PLAY', !isPaused);
       isPaused ? audio.current.pause() : audio.current.play();
     }
   }, [url, audioPaused, isPaused]);
 
+  useEffect(() => {
+    if (audio.current) {
+      const onEnd = () => onCommand('onEnd');
+      const onTime = () => onCommand('onTime', audio.current?.currentTime ?? 0);
+
+      audio.current.addEventListener('ended', onEnd);
+      audio.current.addEventListener('timeupdate', onTime);
+
+      return () => {
+        audio.current.removeEventListener('ended', onEnd);
+        audio.current.removeEventListener('timeupdate', onTime);
+      };
+    }
+  }, [audio, onCommand]);
+
+  useEffect(() => {
+    if (restart) {
+      audio.current.currentTime = 0;
+    }
+  }, [audio, restart]);
+
   return (
     <div className={styles.player}>
+      <div>{ `${time} ${song?.duration ?? 0}` }</div>
+      <div>{ song?.title ?? 'No song playing' }</div>
       <div className={styles.controls}>
+        <button onClick={() => onCommand('previous')}>
+          Previous
+        </button>
         <button onClick={() => onCommand('setPlaying', isPaused)}>
           { isPaused ? 'Play' : 'Pause' }
         </button>
-        <div>{ song?.title ?? 'No song playing' }</div>
+        <button onClick={() => onCommand('next')}>
+          Next
+        </button>
       </div>
-      <audio ref={audio} src={url} controls />
+      <audio ref={audio} src={url} />
     </div>
   );
 }

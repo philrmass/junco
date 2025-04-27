@@ -19,6 +19,7 @@
 
 .album {
   padding-left: 16px;
+  font-variation-settings: 'wdth' 100, 'wght' 500;
 }
 
 .song {

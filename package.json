@@ -7,7 +7,7 @@
     "preci": "rm -rf node_modules",
     "ci": "yarn install --frozen-lockfile",
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --base=/junco/",
     "preview": "vite preview"
   },
   "dependencies": {
