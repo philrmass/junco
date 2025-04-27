@@ -1,0 +1,17 @@
+.player {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px;
+}
+
+.player audio {
+  height: 40px;
+}
+
+.controls {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}

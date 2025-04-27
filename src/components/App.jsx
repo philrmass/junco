@@ -2,6 +2,7 @@ import { useEffect, useState } from 'preact/hooks';
 import preactLogo from '../assets/preact.svg';
 import appLogo from '/favicon.svg';
 import Library from './Library';
+import Player from './Player';
 import Queue from './Queue';
 import styles from './App.module.css';
 
@@ -18,21 +19,14 @@ async function getArtists(host) {
   }
 }
 
-function getSongUrl(song, host) {
-  if (!song?.path) return null;
-
-  return `http://${host}:${port}/files/${encodeURIComponent(song.path)}`;
-};
-
-// ??? Player
+// ??? play automatically if not already playing
 // ??? play next song in queue if playing
-// ??? play automatically
 // ??? next button
-// ??? calc queue index
+// ??? set duration
 // ??? Tabs
 // ??? toast for song & album add
 // ??? add search as overlay button, bottom right
-// ??? player component
+// ??? clear queue
 // ??? overflow shadows
 
 export function App() {
@@ -44,24 +38,16 @@ export function App() {
   const [albumGuid, setAlbumGuid] = useState(null);
   const [queue, setQueue] = useState([]);
   const [song, setSong] = useState(null);
-  const [url, setUrl] = useState(null);
-  // const [playing, setPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [showQueue, setShowQueue] = useState(false);
   const queueIndex = queue.findIndex((s) => s.guid === song?.guid);
-  // const url = Boolean(song) ? getSongUrl(song, host) : 'bad';
-  // console.log('URL', url);
+  const baseUrl = `http://${host}:${port}/files/`
 
   useEffect(() => {
     (async () => setArtists(await getArtists(host)))();
   }, [host]);
 
-  useEffect(() => {
-    setUrl(getSongUrl(song, host));
-  }, [song]);
-
   const handleCommand = (command, param0) => {
-    // ??? console.log('CMD', command, param0);
-
     switch(command) {
       case 'addAlbum': {
         const songs = param0.songs ?? [];
@@ -74,6 +60,9 @@ export function App() {
         setSong(param0);
         break;
       }
+      case 'setPlaying':
+        setIsPlaying(param0);
+        break;
       case 'toggleArtistIndex':
         setArtistGuid((last) => param0 == last ? null : param0);
         break;
@@ -83,7 +72,6 @@ export function App() {
     }
   };
 
-  // console.log('GUIDS', artistGuid?.slice(-4), albumGuid?.slice(-4));
   return (
     <div className={styles.page}>
       <div className={styles.top}>
@@ -113,12 +101,12 @@ export function App() {
           <div>X Songs, H:M:S</div>
         </div>
       </div>
-      <div className={styles.player}>
-        <audio src={url} controls />
-        <div>
-          { song?.title ?? 'No song playing' }
-        </div>
-      </div>
+      <Player
+        baseUrl={baseUrl}
+        isPaused={!isPlaying}
+        song={song}
+        onCommand={handleCommand}
+      />
     </div>
   );
 }
