@@ -4,14 +4,44 @@
   flex-direction: column;
   gap: 2px;
   padding: 8px;
+  color: white;
 }
 
 .player audio {
   height: 40px;
 }
 
+.player button {
+  background: transparent;
+  color: white;
+}
+
 .controls {
   align-items: center;
   display: flex;
   gap: 8px;
+}
+
+.barLine {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  width: 90%;
+}
+
+.barLine button {
+  padding: 0 2px;
+  font-size: 24px;
+}
+
+.bar {
+  background: var(--grey);
+  width: 100%;
+}
+
+.barOn {
+  height: 2px;
+  background: white;
+  width: 100%;
 }

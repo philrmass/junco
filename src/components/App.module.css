@@ -6,23 +6,8 @@
 }
 
 .top {
+  background: white;
   flex-grow: 1;
-  background: #f0f0f0;
   overflow: hidden;
   overflow-y: auto;
-}
-
-.tabs {
-  display: flex;
-}
-
-.tab {
-  align-items: center;
-  border: 1px solid #aaa;
-  display: flex;
-  flex-basis: 50%;
-  flex-direction: column;
-  flex-grow: 1;
-  justify-content: center;
-  padding: 16px;
 }

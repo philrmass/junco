@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
+import { getTime } from '../utilities/time';
 import styles from './Player.module.css';
 
 async function loadSong(baseUrl, song) {
@@ -15,11 +16,14 @@ export default function Player({
   restart,
   song,
   time,
+  volume,
   onCommand,
 }) {
   const [url, setUrl] = useState(null);
   const audio = useRef(null);
   const audioPaused = audio.current?.paused;
+  const duration = song?.duration ?? 0;
+  const timeRatio = duration ? time / duration : 0;
 
   useEffect(() => {
     (async () => {
@@ -36,16 +40,23 @@ export default function Player({
   }, [url, audioPaused, isPaused]);
 
   useEffect(() => {
+    onCommand('onVolume', audio.current?.volume ?? 0);
+  }, [audio]);
+
+  useEffect(() => {
     if (audio.current) {
       const onEnd = () => onCommand('onEnd');
       const onTime = () => onCommand('onTime', audio.current?.currentTime ?? 0);
+      const onVolume = () => onCommand('onVolume', audio.current?.volume ?? 0);
 
       audio.current.addEventListener('ended', onEnd);
       audio.current.addEventListener('timeupdate', onTime);
+      audio.current.addEventListener('volumechange', onVolume);
 
       return () => {
         audio.current.removeEventListener('ended', onEnd);
         audio.current.removeEventListener('timeupdate', onTime);
+        audio.current.removeEventListener('volumechange', onVolume);
       };
     }
   }, [audio, onCommand]);
@@ -56,10 +67,45 @@ export default function Player({
     }
   }, [audio, restart]);
 
+  const incVolume = (amount) => {
+    if (audio.current) {
+      const value = audio.current.volume + amount;
+      console.log('VOL', value);
+      audio.current.volume = Math.min(Math.max(0, value), 1);
+    }
+  };
+  /*
+  const incVolume = (amount) => {
+    const volume = audio.current?.volume;
+
+    if (typeof volume !== 'undefined')
+      audio.current.volume = volume + amount;
+    }
+  };
+  */
+
+  const renderBar= (ratio) => {
+    const width = `${100 * ratio}%`;
+
+    return (
+      <div className={styles.bar}>
+        <div className={styles.barOn} style={{ width }}/>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.player}>
-      <div>{ `${time} ${song?.duration ?? 0}` }</div>
-      <div>{ song?.title ?? 'No song playing' }</div>
+      <div className={styles.barLine}>
+        <div>
+          { `${getTime(time)}` }
+        </div>
+        { renderBar(timeRatio) }
+        <div>
+          { `${getTime(duration)}` }
+        </div>
+      </div>
+      <div>{ song?.title }</div>
       <div className={styles.controls}>
         <button onClick={() => onCommand('previous')}>
           Previous
@@ -71,11 +117,21 @@ export default function Player({
           Next
         </button>
       </div>
+      <div className={styles.barLine}>
+        <button onClick={() => incVolume(-0.02)}>
+          -
+        </button>
+        { renderBar(volume) }
+        <button onClick={() => incVolume(0.02)}>
+          +
+        </button>
+      </div>
       <audio ref={audio} src={url} />
     </div>
   );
 }
 
+// tesla
 /*
 function Player({
   song,
@@ -89,56 +145,6 @@ function Player({
   removeEvent,
   openCommands,
 }) {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [time, setTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const player = useRef(null);
-
-  useEffect(() => {
-    if (player) {
-      if (song) {
-        setIsLoaded(false);
-        fetch(`/songs/${encodeURIComponent(song.path)}`)
-          .then((resp) => resp.blob())
-          .then((songBlob) => {
-            const url = URL.createObjectURL(songBlob);
-            player.current.src = url;
-            setIsLoaded(true);
-            setTime(0);
-          }).catch((error) => {
-            console.error('Could not fetch song:', error.message);
-          });
-      } else {
-        player.current.src = '';
-        setIsLoaded(false);
-        setTime(0);
-        setDuration(0);
-      }
-    }
-  }, [player, song]);
-
-  useEffect(() => {
-    if (player && nextSong) {
-      player.current.onended = () => {
-        nextSong();
-      };
-    }
-  }, [player, nextSong]);
-
-  useEffect(() => {
-    if (player && isLoaded) {
-      if (isPlaying === player.current.paused) {
-        isPlaying ? player.current.play() : player.current.pause();
-      }
-    }
-  }, [player, isLoaded, isPlaying]);
-
-  useEffect(() => {
-    if (player) {
-      player.current.ondurationchange = (e) => setDuration(e.target.duration);
-    }
-  }, [player]);
-
   useEffect(() => {
     if (player) {
       player.current.volume = volume;

@@ -4,6 +4,7 @@ import appLogo from '/favicon.svg';
 import Library from './Library';
 import Player from './Player';
 import Queue from './Queue';
+import Tabs from './Tabs';
 import styles from './App.module.css';
 
 const port = 7777;
@@ -19,15 +20,15 @@ async function getArtists(host) {
   }
 }
 
-// ??? Tabs
-// ??? Fix time display
-// ??? add time line
-// ??? make time line clickable
-// ??? fix queue index with repeated songs
+// ??? add icons
+// ??? fix player layout
 // ??? toast for song & album add
 // ??? add search as overlay button, bottom right
 // ??? clear queue, bottom right, ghostbusters icon, hold for options
 // ??? overflow shadows
+// ??? fix queue index with repeated songs
+// ??? make time line clickable
+// ??? make volume clickable
 // ??? call URL.revokeObjectURL(url) on old songs
 
 export function App() {
@@ -38,6 +39,7 @@ export function App() {
   const [queue, setQueue] = useState([]);
   const [song, setSong] = useState(null);
   const [time, setTime] = useState(0);
+  const [volume, setVolume] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [restart, setRestart] = useState(false);
   const [showQueue, setShowQueue] = useState(false);
@@ -82,6 +84,9 @@ export function App() {
         setTime(param0);
         setRestart(false);
         break;
+      case 'onVolume':
+        setVolume(param0);
+        break
       case 'previous': {
         const previousSong = queue[queueIndex - 1];
 
@@ -123,22 +128,19 @@ export function App() {
           />
         ) }
       </div>
-      <div className={styles.tabs}>
-        <div className={styles.tab} onClick={() => setShowQueue(false)}>
-          <div>Library</div>
-          <div>Artists, Albums, Songs</div>
-        </div>
-        <div className={styles.tab} onClick={() => setShowQueue(true)}>
-          <div>Queue</div>
-          <div>X Songs, H:M:S</div>
-        </div>
-      </div>
+      <Tabs
+        artists={artists}
+        queue={queue}
+        showQueue={showQueue}
+        onShowQueue={setShowQueue}
+      />
       <Player
         baseUrl={baseUrl}
         isPaused={!isPlaying}
         restart={restart}
         song={song}
         time={time}
+        volume={volume}
         onCommand={handleCommand}
       />
     </div>
