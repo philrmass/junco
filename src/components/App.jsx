@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'preact/hooks';
+import { getIconSvgs } from '../utilities/icon';
 import preactLogo from '../assets/preact.svg';
 import appLogo from '/favicon.svg';
 import Library from './Library';
@@ -8,6 +9,21 @@ import Tabs from './Tabs';
 import styles from './App.module.css';
 
 const port = 7777;
+
+const icons = [
+  'caretDown',
+  'caretUp',
+  // ??? add icons
+  // 'cross',
+  // 'menu',
+  'next',
+  'pause',
+  'play',
+  'plus',
+  'previous',
+  // 'random',
+  // 'search',
+];
 
 async function getArtists(host) {
   try {
@@ -20,16 +36,19 @@ async function getArtists(host) {
   }
 }
 
-// ??? add icons
-// ??? fix player layout
-// ??? toast for song & album add
+// ??? overflow shadows, receipts
+// ??? fix queue index with repeated songs
+// ??? add server and deploy, 3333
+
+// ??? song remove in queue
+// ??? drag and drop songs in queue
+// ??? local storage for queue
 // ??? add search as overlay button, bottom right
 // ??? clear queue, bottom right, ghostbusters icon, hold for options
-// ??? overflow shadows
-// ??? fix queue index with repeated songs
 // ??? make time line clickable
 // ??? make volume clickable
 // ??? call URL.revokeObjectURL(url) on old songs
+// ??? store songs in indexeddb
 
 export function App() {
   const host = import.meta.env.DEV ? 'localhost' : '192.168.1.2';
@@ -143,6 +162,9 @@ export function App() {
         volume={volume}
         onCommand={handleCommand}
       />
+      <div className={styles.hidden}>
+        { getIconSvgs(icons) }
+      </div>
     </div>
   );
 }

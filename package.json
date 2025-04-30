@@ -11,7 +11,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "preact": "^10.21.0"
+    "preact": "^10.21.0",
+    "utilities": "https://github.com/philrmass/utilities#v0.12.6"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.9.4",

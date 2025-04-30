@@ -2,8 +2,8 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 8px;
+  font-size: 18px;
+  padding: 8px 16px;
   color: white;
 }
 
@@ -14,12 +14,36 @@
 .player button {
   background: transparent;
   color: white;
+  padding: 0;
 }
 
 .controls {
   align-items: center;
   display: flex;
-  gap: 8px;
+  gap: 32px;
+  margin-bottom: -8px;
+}
+
+.wrap {
+  max-width: 100%;
+}
+
+.title {
+  white-space: pre;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.icon {
+  display: block;
+  height: 32px;
+  width: 32px;
+}
+
+.play {
+  display: block;
+  height: 48px;
+  width: 48px;
 }
 
 .barLine {
@@ -31,8 +55,7 @@
 }
 
 .barLine button {
-  padding: 0 2px;
-  font-size: 24px;
+  padding: 0;
 }
 
 .bar {

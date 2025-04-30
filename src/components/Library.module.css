@@ -1,10 +1,10 @@
 .library {
   background: white;
-  padding: 16px;
+  padding: 16px 32px;
 }
 
 .library button {
-  background: #ddd;
+  background: var(--light-grey);
   height: auto;
   margin: 2px 8px;
   padding: 0;
@@ -23,5 +23,5 @@
 }
 
 .song {
-  padding: 4px 0 4px 32px;
+  padding: 6px 0 6px 32px;
 }

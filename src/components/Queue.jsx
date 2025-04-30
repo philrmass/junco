@@ -8,8 +8,13 @@ export default function Queue({
   return (
     <div className={styles.queue}>
       { queue.map((song, index) => (
-        <div>
-          { `${index === queueIndex ? 'X' : '_'} ${song.title}` }
+        <div className={`${styles.entry} ${index === queueIndex ? styles.selected : ''}`}>
+          <div className={styles.song}>
+            { song.title }
+          </div>
+          <div className={styles.artist}>
+            { `${song.artist} / ${song.album}` }
+          </div>
         </div>
       )) }
       { queue.length === 0 && (
