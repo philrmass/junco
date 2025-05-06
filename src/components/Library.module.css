@@ -1,6 +1,28 @@
+.window {
+  --shadow-height: 16px;
+
+  height: 100%;
+  overflow-y: auto;
+}
+
+.topShadow {
+  background: linear-gradient(white, transparent);
+  height: var(--shadow-height);
+  position: sticky;
+  top: 0;
+  width: 100%;
+}
+
+.bottomShadow {
+  background: linear-gradient(transparent, white);
+  bottom: 0px;
+  height: var(--shadow-height);
+  position: sticky;
+  width: 100%;
+}
+
 .library {
-  background: white;
-  padding: 16px 32px;
+  padding: 0 32px;
 }
 
 .library button {
@@ -14,7 +36,7 @@
 }
 
 .artist {
-  padding: 4px 0;
+  padding: 6px 0;
 }
 
 .album {

@@ -1,6 +1,24 @@
+.main {
+  /*
+  height: 80%;
+  border: 1px solid yellow;
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  gap: 16px;
+  */
+}
+
 .queue {
+  /*
+  max-height: 100%;
   background: white;
   padding: 16px;
+  overflow: auto;
+  flex-grow: 1;
+  */
   display: flex;
   flex-direction: column;
   gap: 4px;
