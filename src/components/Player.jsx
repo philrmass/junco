@@ -94,7 +94,7 @@ export default function Player({
       );
     }
 
-    return <div>&nbsp;</div>
+    return <div className={styles.title}>&nbsp;</div>;
   };
 
   return (
@@ -108,7 +108,7 @@ export default function Player({
           { `${getTime(duration)}` }
         </div>
       </div>
-      <div className={styles.wrap}>
+      <div className={styles.box}>
         { renderTitle(song) }
       </div>
       <div className={styles.controls}>

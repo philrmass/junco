@@ -1,3 +1,4 @@
+import Icon from '../utilities/Icon';
 import styles from './Queue.module.css';
 
 export default function Queue({
@@ -5,16 +6,26 @@ export default function Queue({
   queueIndex,
   onCommand,
 }) {
+  const handleRemove = (index) => {
+    console.log('REM', index);
+  };
+
   return (
     <div className={styles.main}>
+      <div className="top-shadow" />
       <div className={`shadows ${styles.queue}`}>
         { queue.map((song, index) => (
           <div className={`${styles.entry} ${index === queueIndex ? styles.selected : ''}`}>
-            <div className={styles.song}>
-              { song.title }
-            </div>
-            <div className={styles.artist}>
-              { `${song.artist} / ${song.album}` }
+            <button onClick={(e) => handleRemove(index)}>
+              <Icon name="cross" className={styles.icon} />
+            </button>
+            <div className={styles.text}>
+              <div className={styles.song}>
+                { song.title }
+              </div>
+              <div className={styles.artist}>
+                { `${song.artist} / ${song.album}` }
+              </div>
             </div>
           </div>
         )) }
@@ -22,6 +33,7 @@ export default function Queue({
           <div>No songs in queue</div>
         ) }
       </div>
+      <div className="bottom-shadow" />
     </div>
   );
 }

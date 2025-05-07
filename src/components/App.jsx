@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'preact/hooks';
+import { useLocalStorage } from 'utilities/hooks';
 import { getIconSvgs } from '../utilities/icon';
 import preactLogo from '../assets/preact.svg';
 import appLogo from '/favicon.svg';
@@ -13,15 +14,12 @@ const port = 7777;
 const icons = [
   'caretDown',
   'caretUp',
-  // ??? add icons
-  // 'cross',
-  // 'menu',
+  'cross',
   'next',
   'pause',
   'play',
   'plus',
   'previous',
-  // 'random',
   // 'search',
 ];
 
@@ -36,13 +34,15 @@ async function getArtists(host) {
   }
 }
 
-// ??? overflow shadows, receipts
 // ??? fix queue index with repeated songs
-// ??? add server and deploy, 3333
-
 // ??? song remove in queue
-// ??? drag and drop songs in queue
 // ??? local storage for queue
+// ??? click to play if not playing
+// ??? add server and deploy, 3333
+// ??? only play on add if not playing
+
+// ??? scroll into view when queue shown
+// ??? drag and drop songs in queue
 // ??? add search as overlay button, bottom right
 // ??? clear queue, bottom right, ghostbusters icon, hold for options
 // ??? make time line clickable
@@ -62,6 +62,7 @@ export function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [restart, setRestart] = useState(false);
   const [showQueue, setShowQueue] = useState(false);
+  // ??? check addedAt
   const queueIndex = queue.findIndex((s) => s.guid === song?.guid);
   const baseUrl = `http://${host}:${port}/files/`
 
@@ -72,13 +73,16 @@ export function App() {
   const handleCommand = (command, param0) => {
     switch(command) {
       case 'addAlbum': {
+        // ??? add addedAt tim songs
         const songs = param0.songs ?? [];
         setQueue((last) => [...last, ...songs]);
+        // ??? only if not playing
         setSong(songs[0]);
         setIsPlaying(true);
         break;
       }
       case 'addSong': {
+        // ??? add addedAt tim songs
         setQueue((last) => [...last, param0]);
         setSong(param0);
         setIsPlaying(true);
@@ -116,6 +120,7 @@ export function App() {
         }
         break;
       }
+      // ??? case 'removeSong':
       case 'setPlaying':
         setIsPlaying(param0);
         break;

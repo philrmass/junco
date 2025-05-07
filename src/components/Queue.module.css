@@ -1,33 +1,31 @@
 .main {
-  /*
-  height: 80%;
-  border: 1px solid yellow;
-  position: fixed;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  padding: 24px;
-  gap: 16px;
-  */
+  height: 100%;
+  overflow-y: auto;
 }
 
 .queue {
-  /*
-  max-height: 100%;
-  background: white;
-  padding: 16px;
-  overflow: auto;
-  flex-grow: 1;
-  */
   display: flex;
   flex-direction: column;
   gap: 4px;
+  padding: 0 32px;
 }
 
 .entry {
+  align-items: flex-start;
+  display: flex;
+  gap: 8px;
   padding: 8px 16px;
-  max-width: 100%;
   white-space: pre;
+}
+
+.entry button {
+  flex-shrink: 0;
+  background: transparent;
+  padding: 0;
+}
+
+.text {
+  max-width: calc(100% - 32px);
 }
 
 .song {
@@ -36,7 +34,7 @@
 }
 
 .artist {
-  font-size: 14px;
+  font-size: var(--small-size);
   margin-top: 4px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -46,3 +44,10 @@
   background: var(--light-grey);
   border-radius: 6px;
 }
+
+.icon {
+  display: block;
+  height: 24px;
+  width: 24px;
+}
+

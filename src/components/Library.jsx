@@ -12,8 +12,8 @@ export default function Library({
   };
 
   return (
-    <div className={styles.window}>
-      <div className={styles.topShadow} />
+    <div className={styles.main}>
+      <div className="top-shadow" />
       <div className={styles.library}>
         { artists.map((artist) => (
           <>
@@ -55,7 +55,7 @@ export default function Library({
           </>
         )) }
       </div>
-      <div className={styles.bottomShadow} />
+      <div className="bottom-shadow" />
     </div>
   );
 }

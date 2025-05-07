@@ -1,10 +1,9 @@
 .player {
   align-items: center;
+  color: white;
   display: flex;
   flex-direction: column;
-  font-size: 18px;
   padding: 8px 16px;
-  color: white;
 }
 
 .player audio {
@@ -24,14 +23,16 @@
   margin-bottom: -8px;
 }
 
-.wrap {
+.box {
   max-width: 100%;
 }
 
 .title {
-  white-space: pre;
-  text-overflow: ellipsis;
+  font-size: var(--large-size);
+  margin-top: 2px;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre;
 }
 
 .icon {

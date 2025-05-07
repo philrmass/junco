@@ -3,15 +3,16 @@
 }
 
 .title {
-  font-variation-settings: 'wdth' 110, 'wght' 500;
+  font-variation-settings: 'wdth' 100, 'wght' 500;
 }
 
 .details {
-  font-size: 14px;
+  font-size: var(--small-size);
 }
 
 .tab {
   align-items: center;
+  border-radius: 0 0 8px 8px;
   color: white;
   display: flex;
   flex-basis: 50%;
@@ -19,10 +20,9 @@
   flex-grow: 1;
   justify-content: center;
   padding: 16px;
-  border-radius: 0 0 8px 8px;
 }
 
 .selected {
-  color: black;
   background: white;
+  color: black;
 }

@@ -1,24 +1,6 @@
-.window {
-  --shadow-height: 16px;
-
+.main {
   height: 100%;
   overflow-y: auto;
-}
-
-.topShadow {
-  background: linear-gradient(white, transparent);
-  height: var(--shadow-height);
-  position: sticky;
-  top: 0;
-  width: 100%;
-}
-
-.bottomShadow {
-  background: linear-gradient(transparent, white);
-  bottom: 0px;
-  height: var(--shadow-height);
-  position: sticky;
-  width: 100%;
 }
 
 .library {
@@ -26,13 +8,12 @@
 }
 
 .library button {
+  aspect-ratio: 1;
   background: var(--light-grey);
   height: auto;
   margin: 2px 8px;
   padding: 0;
   padding: 0 8px;
-  aspect-ratio: 1;
-  border-radius: 4px;
 }
 
 .artist {
