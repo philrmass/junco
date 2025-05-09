@@ -15,6 +15,7 @@ const icons = [
   'caretDown',
   'caretUp',
   'cross',
+  'menu',
   'next',
   'pause',
   'play',
@@ -34,13 +35,9 @@ async function getArtists(host) {
   }
 }
 
-// ??? fix queue index with repeated songs
-// ??? song remove in queue
-// ??? local storage for queue
-// ??? click to play if not playing
 // ??? add server and deploy, 3333
-// ??? only play on add if not playing
 
+// ??? add clear with menu and long press
 // ??? scroll into view when queue shown
 // ??? drag and drop songs in queue
 // ??? add search as overlay button, bottom right
@@ -55,39 +52,52 @@ export function App() {
   const [artists, setArtists] = useState([]);
   const [artistGuid, setArtistGuid] = useState(null);
   const [albumGuid, setAlbumGuid] = useState(null);
-  const [queue, setQueue] = useState([]);
-  const [song, setSong] = useState(null);
+  const [queue, setQueue] = useLocalStorage('jQueue', []);
+  const [song, setSong] = useLocalStorage('jSong', null);
   const [time, setTime] = useState(0);
   const [volume, setVolume] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [restart, setRestart] = useState(false);
   const [showQueue, setShowQueue] = useState(false);
-  // ??? check addedAt
-  const queueIndex = queue.findIndex((s) => s.guid === song?.guid);
+  const queueIndex = queue.findIndex((s) => (
+    s.guid === song?.guid && s.addedAt === song?.addedAt
+  ));
   const baseUrl = `http://${host}:${port}/files/`
 
   useEffect(() => {
     (async () => setArtists(await getArtists(host)))();
   }, [host]);
 
+  const addSongs = (songs) => {
+    const addedAt = Date.now();
+    const updated = songs.map((song) => ({ ...song, addedAt }));
+
+    setQueue((last) => [...last, ...updated]);
+    if (!isPlaying) {
+      setSong(updated[0]);
+      setIsPlaying(true);
+    }
+  };
+
+  const removeSong = (index) => {
+    setQueue((q) => [...q.slice(0, index), ...q.slice(index + 1)]);
+  };
+
   const handleCommand = (command, param0) => {
     switch(command) {
       case 'addAlbum': {
-        // ??? add addedAt tim songs
-        const songs = param0.songs ?? [];
-        setQueue((last) => [...last, ...songs]);
-        // ??? only if not playing
-        setSong(songs[0]);
-        setIsPlaying(true);
+        addSongs(param0.songs ?? []);
         break;
       }
       case 'addSong': {
-        // ??? add addedAt tim songs
-        setQueue((last) => [...last, param0]);
-        setSong(param0);
-        setIsPlaying(true);
+        addSongs([param0]);
         break;
       }
+      case 'clearQueue':
+        // ???
+        console.log('CLEAR');
+        setQueue([]);
+        break;
       case 'next': {
         const nextSong = queue[queueIndex + 1];
         if (nextSong) {
@@ -109,7 +119,11 @@ export function App() {
         break;
       case 'onVolume':
         setVolume(param0);
-        break
+        break;
+      case 'playSong':
+        setSong(queue[param0]);
+        setIsPlaying(true);
+        break;
       case 'previous': {
         const previousSong = queue[queueIndex - 1];
 
@@ -120,7 +134,9 @@ export function App() {
         }
         break;
       }
-      // ??? case 'removeSong':
+      case 'removeSong':
+        removeSong(param0);
+        break;
       case 'setPlaying':
         setIsPlaying(param0);
         break;
@@ -138,6 +154,7 @@ export function App() {
       <div className={styles.top}>
         { showQueue && (
           <Queue
+            isPlaying={isPlaying}
             queue={queue}
             queueIndex={queueIndex}
             onCommand={handleCommand}

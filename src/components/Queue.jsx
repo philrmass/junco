@@ -2,31 +2,35 @@ import Icon from '../utilities/Icon';
 import styles from './Queue.module.css';
 
 export default function Queue({
+  isPlaying,
   queue,
   queueIndex,
   onCommand,
 }) {
-  const handleRemove = (index) => {
-    console.log('REM', index);
-  };
-
   return (
     <div className={styles.main}>
       <div className="top-shadow" />
       <div className={`shadows ${styles.queue}`}>
         { queue.map((song, index) => (
           <div className={`${styles.entry} ${index === queueIndex ? styles.selected : ''}`}>
-            <button onClick={(e) => handleRemove(index)}>
+            <button
+              className={styles.remove}
+              onClick={() => onCommand('removeSong', index)}
+            >
               <Icon name="cross" className={styles.icon} />
             </button>
-            <div className={styles.text}>
+            <button
+              className={styles.text}
+              disabled={isPlaying}
+              onClick={() => onCommand('playSong', index)}
+            >
               <div className={styles.song}>
                 { song.title }
               </div>
               <div className={styles.artist}>
                 { `${song.artist} / ${song.album}` }
               </div>
-            </div>
+            </button>
           </div>
         )) }
         { queue.length === 0 && (
@@ -34,6 +38,12 @@ export default function Queue({
         ) }
       </div>
       <div className="bottom-shadow" />
+      <button
+        className={styles.clear}
+        onClick={() => onCommand('clearQueue')}
+      >
+        <Icon name="menu" className={styles.icon} />
+      </button>
     </div>
   );
 }

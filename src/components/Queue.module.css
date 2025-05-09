@@ -1,6 +1,7 @@
 .main {
   height: 100%;
   overflow-y: auto;
+  position: relative;
 }
 
 .queue {
@@ -18,14 +19,21 @@
   white-space: pre;
 }
 
-.entry button {
+.remove {
   flex-shrink: 0;
   background: transparent;
   padding: 0;
 }
 
 .text {
+  background: transparent;
+  font: inherit;
   max-width: calc(100% - 32px);
+  text-align: left;
+}
+
+.text:disabled {
+  color: inherit;
 }
 
 .song {
@@ -51,3 +59,17 @@
   width: 24px;
 }
 
+.clear {
+  background: var(--dark-grey);
+  bottom: 32px;
+  color: var(--white);
+  padding: 4px;
+  position: absolute;
+  right: 32px;
+}
+
+.clear .icon {
+  display: block;
+  height: 32px;
+  width: 32px;
+}
