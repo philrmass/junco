@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { getTime } from '../utilities/time';
-import Icon from '../utilities/Icon';
+import Icon from '../utilities/icon';
 import styles from './Player.module.css';
 
 async function loadSong(baseUrl, song) {
