@@ -1,4 +1,4 @@
-import Icon from '../utilities/Icon';
+import Icon from '../utilities/icon';
 import styles from './Queue.module.css';
 
 export default function Queue({
