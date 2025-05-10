@@ -4,7 +4,7 @@ import preact from '@preact/preset-vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  // base: '/junco/', // ??? Remove if working
+  base: import.meta.env.DEV ? '/' : '/junco/',
   plugins: [preact(), VitePWA({
     registerType: 'prompt',
     injectRegister: false,

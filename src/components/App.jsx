@@ -9,7 +9,7 @@ import Queue from './Queue';
 import Tabs from './Tabs';
 import styles from './App.module.css';
 
-const port = 7777;
+const port = 7778;
 
 const icons = [
   'caretDown',
@@ -36,6 +36,7 @@ async function getArtists(host) {
 }
 
 // ??? add server and deploy, 3333
+// ??? set base with env vars
 
 // ??? add clear with menu and long press
 // ??? scroll into view when queue shown
